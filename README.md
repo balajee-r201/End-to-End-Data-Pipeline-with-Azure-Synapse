@@ -35,4 +35,7 @@ Below is the architecture for this project, showing the data flow from API to Po
 ## Power BI Dashboard
 <img width="667" alt="Power BI Dashbord" src="https://github.com/user-attachments/assets/8219dc54-3041-437b-911a-5f2c26b94f93" />
 
----
+## Pipeline
+<img width="800" alt="Pipeline" src="https://github.com/user-attachments/assets/48de3f80-913c-441c-ae6e-7603a802a395" />
+
+I have designed a dummy pipeline to automate the entire orchestration, and I’m excited to take it to the next level! 🚀 There’s plenty of opportunity for improvement, and I’m actively working on enhancing it with scheduled and event-based triggers to achieve full automation—from data ingestion to dynamic Power BI dashboards. 
