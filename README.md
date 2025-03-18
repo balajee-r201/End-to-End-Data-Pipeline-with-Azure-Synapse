@@ -32,5 +32,7 @@ This project leverages **Azure Synapse Serverless Pool** for data ingestion and 
 ## Architecture Diagram
 Below is the architecture for this project, showing the data flow from API to Power BI:
 ![Arch](https://github.com/user-attachments/assets/cb62a031-0e16-4db1-b88f-dc75f67102f6)
+## Power BI Dashboard
+<img width="667" alt="Power BI Dashbord" src="https://github.com/user-attachments/assets/8219dc54-3041-437b-911a-5f2c26b94f93" />
 
 ---
