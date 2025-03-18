@@ -31,5 +31,6 @@ This project leverages **Azure Synapse Serverless Pool** for data ingestion and 
 - Automate data pipeline using **Azure Data Factory triggers**.
 ## Architecture Diagram
 Below is the architecture for this project, showing the data flow from API to Power BI:
+![Arch](https://github.com/user-attachments/assets/cb62a031-0e16-4db1-b88f-dc75f67102f6)
 
 ---
