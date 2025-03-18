@@ -1,0 +1,76 @@
+/*Creating Bronze Table - Raw Data*/
+IF OBJECT_ID('Bronze.ev_charging_raw') IS NOT NULL
+    DROP EXTERNAL TABLE Bronze.ev_charging_raw;
+CREATE EXTERNAL TABLE Bronze.ev_charging_raw
+WITH
+(
+    LOCATION='Medallion/Bronze',
+    DATA_SOURCE=all_stations,
+    FILE_FORMAT=csv_format
+)
+AS
+SELECT 
+access_code,
+access_days_time,
+access_detail_code,
+fuel_type_code,
+cards_accepted,
+date_last_confirmed,
+open_date,
+groups_with_access_code,
+id,
+maximum_vehicle_class,
+owner_type_code,
+station_name,
+city,
+[state],
+street_address,
+ev_dc_fast_num,
+ev_level1_evse_num,
+ev_level2_evse_num,
+ev_network,
+ev_network_web,
+ev_pricing,
+ev_renewable_source
+FROM
+    OPENROWSET(
+        BULK 'Source/data_d959d10e-a37d-4aa5-99ca-e0518e0f7db4_30568ded-cecd-42ca-aaab-d7b0d928ed81.json',
+        DATA_SOURCE='all_stations',
+        FORMAT = 'CSV',
+        FIELDQUOTE = '0x0b',
+        FIELDTERMINATOR ='0x0b',
+        ROWTERMINATOR = '0x0a',
+        PARSER_VERSION='1.0'
+    )
+WITH (
+        JsonDoc NVARCHAR(MAX)
+    ) AS ev_json
+CROSS APPLY OPENJSON(JsonDoc)
+WITH (
+    fuel_stations NVARCHAR(MAX) as JSON
+) 
+CROSS APPLY OPENJSON(fuel_stations)
+WITH (
+        access_code VARCHAR(50) '$.access_code',
+    access_days_time VARCHAR(255) '$.access_days_time',
+    access_detail_code VARCHAR(200) '$.access_detail_code',
+    fuel_type_code VARCHAR(50) '$.fuel_type_code',
+    cards_accepted VARCHAR(100) '$.cards_accepted',
+    date_last_confirmed VARCHAR(50) '$.date_last_confirmed',
+    open_date VARCHAR(50) '$.open_date',
+    groups_with_access_code VARCHAR(100) '$.groups_with_access_code',
+    id INT '$.id',
+    maximum_vehicle_class VARCHAR(100) '$.maximum_vehicle_class',
+    owner_type_code VARCHAR(10) '$.owner_type_code',
+    station_name VARCHAR(255) '$.station_name',
+    city VARCHAR(100) '$.city',
+    [state] VARCHAR(50) '$.state',
+    street_address VARCHAR(255) '$.street_address',
+    ev_dc_fast_num INT '$.ev_dc_fast_num',
+    ev_level1_evse_num INT '$.ev_level1_evse_num',
+    ev_level2_evse_num INT '$.ev_level2_evse_num',
+    ev_network VARCHAR(255) '$.ev_network',
+    ev_network_web VARCHAR(255) '$.ev_network_web',
+    ev_pricing VARCHAR(255) '$.ev_pricing',
+    ev_renewable_source VARCHAR(200) '$.ev_renewable_source'
+) 
