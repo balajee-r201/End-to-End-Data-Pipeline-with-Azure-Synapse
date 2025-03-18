@@ -1,0 +1,38 @@
+/*Creating Silver Table - Transformed Data*/
+IF OBJECT_ID('Silver.ev_charging_transformed') IS NOT NULL
+    DROP EXTERNAL TABLE Silver.ev_charging_transformed;
+CREATE EXTERNAL TABLE Silver.ev_charging_transformed
+WITH
+(
+    LOCATION='Medallion/Silver',
+    DATA_SOURCE=all_stations,
+    FILE_FORMAT=csv_format
+)
+AS
+SELECT 
+access_code,
+access_days_time,
+access_detail_code,
+fuel_type_code,
+cards_accepted,
+CAST(date_last_confirmed AS DATE) AS date_last_confirmed,
+CAST(open_date AS DATE) AS open_date,
+groups_with_access_code,
+id,
+maximum_vehicle_class,
+owner_type_code,
+station_name,
+city,
+[state],
+street_address,
+CAST(ev_dc_fast_num AS SMALLINT) AS ev_dc_fast_num,
+CAST(ev_level1_evse_num AS INT) AS ev_level1_evse_num,
+CAST(ev_level2_evse_num AS INT) AS ev_level2_evse_num,
+ev_network,
+ev_network_web,
+ev_pricing,
+ev_renewable_source
+FROM Bronze.ev_charging_raw
+WHERE fuel_type_code='ELEC'
+AND 
+station_name IS NOT NULL;
