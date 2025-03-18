@@ -1,4 +1,4 @@
-# Azure-Synapse---Serverless-Pool-Project
+# End-to-End Data Pipeline with Azure Synapse
 ## Overview
 This project leverages **Azure Synapse Serverless Pool** for data ingestion and transformation. The dataset used in this project comes from the **National Renewable Energy Laboratory (NREL)** and focuses on **electric charging station locations** across the U.S.
 
