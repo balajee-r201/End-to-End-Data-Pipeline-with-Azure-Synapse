@@ -1,0 +1,70 @@
+/*Creating Gold Table - Transformed Data*/
+IF OBJECT_ID('Gold.ev_charging_gold') IS NOT NULL
+    DROP EXTERNAL TABLE Gold.ev_charging_gold;
+CREATE EXTERNAL TABLE Gold.ev_charging_gold
+WITH
+(
+    LOCATION='Medallion/Gold',
+    DATA_SOURCE=all_stations,
+    FILE_FORMAT=csv_format
+)
+AS
+SELECT 
+access_code,
+access_days_time,
+access_detail_code,
+fuel_type_code,
+cards_accepted,
+date_last_confirmed,
+open_date,
+groups_with_access_code,
+id,
+CASE
+    maximum_vehicle_class
+    WHEN 'LD' THEN 'Passengers'
+    WHEN 'MD' THEN 'Medium-duty'
+    WHEN 'HD' THEN 'Heavy-duty'  
+END AS Max_Vehicle_class,   
+CASE
+    owner_type_code
+    WHEN 'FG' THEN 'Federal Government'
+    WHEN 'J' THEN 'Jointly Owned'
+    WHEN 'LG' THEN 'Local Government'
+    WHEN 'P' THEN 'Privately'
+    WHEN 'SG' THEN 'State Government'
+    WHEN 'T' THEN 'Utility'
+END AS owner_type,
+station_name,
+city,
+[state],
+street_address,
+ev_dc_fast_num,
+ev_level1_evse_num,
+ev_level2_evse_num,
+ev_network,
+ev_network_web,
+ev_pricing,
+ev_renewable_source,
+CASE 
+    WHEN access_days_time LIKE '%24%' THEN 'Yes'
+    ELSE 'No'
+END AS allday_open
+FROM Silver.ev_charging_transformed;
+
+/*VIEW*/
+CREATE VIEW Gold.years_functioning
+AS
+SELECT 
+access_days_time,
+cards_accepted,
+YEAR(date_last_confirmed)-YEAR(open_date) AS active_years,
+Max_Vehicle_class,   
+owner_type,
+station_name,
+city,
+[state],
+ev_network,
+ev_pricing,
+allday_open
+FROM Gold.ev_charging_gold
+WHERE cards_accepted IS NOT NULL;
